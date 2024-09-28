@@ -4,6 +4,7 @@ import Login from "../../admin/authentication/login/login";
 import SignUp from "../../admin/authentication/signUp/SignUp";
 import Dashboard from "../../admin/dashbord/Dashboard";
 import PrivateDashboard from "../../admin/privateDashboard/PrivateDashboard";
+import TextEditor from "../../admin/textEditor/TextEditor";
 import DonarList from "../../pages/DonarList/DonarList";
 import Home from "../../pages/home/Home";
 import FindBlood from "../findBlod/FindBlood";
@@ -56,6 +57,10 @@ const Router = createBrowserRouter([
         element: <Admin_request />,
         loader: () =>
           fetch("http://localhost/durbar-20-client/admin_pending.php"),
+      },
+      {
+        path: "/dashboard/editor",
+        element: <TextEditor />,
       },
     ],
   },
