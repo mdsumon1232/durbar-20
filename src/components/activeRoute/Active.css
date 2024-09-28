@@ -1,0 +1,13 @@
+.active-link {
+  position: relative;
+}
+
+.active-link::after {
+  position: absolute;
+  content: "";
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: black;
+}
