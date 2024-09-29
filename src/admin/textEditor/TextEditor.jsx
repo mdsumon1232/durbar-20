@@ -1,10 +1,13 @@
 import JoditEditor from "jodit-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPhotoFilm } from "react-icons/fa6";
 
 const TextEditor = () => {
   const editor = useRef(null);
   const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [cover, setCover] = useState(null);
+  const [adminId, setAdminId] = useState(null);
   const config = {
     readonly: false,
     height: 500,
@@ -21,17 +24,32 @@ const TextEditor = () => {
     },
   };
 
-  //   handle form data
+  // Helper function to remove HTML tags
+  const stripHTMLTags = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
 
-  const formData = (e) => {
+  useEffect(() => {
+    const admin_id = sessionStorage.getItem("user");
+    setAdminId(admin_id);
+  }, []);
+
+  // Handle form submission
+  const handleFormData = (e) => {
     e.preventDefault();
 
+    // Get the plain text content by stripping HTML tags
+    const plainTextContent = stripHTMLTags(content);
+
     const blogData = new FormData();
+    blogData.append("title", title);
+    blogData.append("content", plainTextContent);
+    blogData.append("cover", cover);
+    blogData.append("id", adminId);
 
-    blogData.append(content, content);
-
-    //  http request
-
+    // HTTP request
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
       if (xhr.status === 200 && xhr.readyState === 4) {
@@ -45,7 +63,7 @@ const TextEditor = () => {
 
   return (
     <div className="w-[90%] mx-auto">
-      <form action="" className="w-full my-5" onSubmit={formData}>
+      <form action="" className="w-full my-5" onSubmit={handleFormData}>
         <label htmlFor="title" className="block text-[20px] mb-2">
           Title
         </label>
@@ -54,12 +72,19 @@ const TextEditor = () => {
           className="w-full border border-black p-2 outline-none rounded-md"
           id="title"
           name="title"
+          onChange={(e) => setTitle(e.target.value)}
         />
         <div className="flex mt-5 items-center">
           <label htmlFor="" className="text-xl">
             Cover
           </label>
-          <input type="file" id="photo" hidden name="cover" />
+          <input
+            type="file"
+            id="photo"
+            hidden
+            name="cover"
+            onChange={(e) => setCover(e.target.files[0])}
+          />
           <label htmlFor="photo">
             <FaPhotoFilm className="text-xl ms-5"> </FaPhotoFilm>
           </label>
@@ -68,6 +93,7 @@ const TextEditor = () => {
         <JoditEditor
           ref={editor}
           value={content}
+          onBlur={(newContent) => setContent(newContent)} // Capture HTML content
           tabIndex={1}
           config={config}
           className="mt-5"
@@ -76,12 +102,12 @@ const TextEditor = () => {
           <input
             type="submit"
             value="Post"
-            className="bg-green-700 text-white py-1 px-3 rounded  me-5"
+            className="bg-green-700 text-white py-1 px-3 rounded me-5"
           />
           <input
             type="reset"
             value="cancel"
-            className="bg-red-700 text-white py-1 px-3 rounded  me-5"
+            className="bg-red-700 text-white py-1 px-3 rounded me-5"
           />
         </div>
       </form>
