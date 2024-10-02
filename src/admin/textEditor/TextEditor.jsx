@@ -8,6 +8,8 @@ const TextEditor = () => {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState(null);
   const [adminId, setAdminId] = useState(null);
+  const [metaText, setMetaText] = useState("");
+  const [formData, setFormData] = useState(null);
   const config = {
     readonly: false,
     height: 500,
@@ -24,30 +26,31 @@ const TextEditor = () => {
     },
   };
 
-  // Helper function to remove HTML tags
-  const stripHTMLTags = (html) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || "";
-  };
-
   useEffect(() => {
     const admin_id = sessionStorage.getItem("user");
     setAdminId(admin_id);
   }, []);
+
+  console.log(metaText);
 
   // Handle form submission
   const handleFormData = (e) => {
     e.preventDefault();
 
     // Get the plain text content by stripping HTML tags
-    const plainTextContent = stripHTMLTags(content);
 
-    const blogData = new FormData();
-    blogData.append("title", title);
-    blogData.append("content", plainTextContent);
-    blogData.append("cover", cover);
-    blogData.append("id", adminId);
+    if (metaText.length > 90) {
+      alert("meta text less than 90 character");
+    } else {
+      const blogData = new FormData();
+      blogData.append("title", title);
+      blogData.append("content", content);
+      blogData.append("cover", cover);
+      blogData.append("id", adminId);
+      blogData.append("metaText", metaText);
+
+      setFormData(blogData);
+    }
 
     // HTTP request
     const xhr = new XMLHttpRequest();
@@ -58,7 +61,7 @@ const TextEditor = () => {
     };
 
     xhr.open("POST", "http://localhost/durbar-20-client/blogContent.php", true);
-    xhr.send(blogData);
+    xhr.send(formData);
   };
 
   return (
@@ -98,6 +101,16 @@ const TextEditor = () => {
           config={config}
           className="mt-5"
         />
+        <div className="mt-5 ">
+          <label htmlFor="" className="block text-[20px] mb-2">
+            Meta text
+          </label>
+          <input
+            type="text"
+            className="w-full border border-black p-2 outline-none rounded-md"
+            onChange={(e) => setMetaText(e.target.value)}
+          />
+        </div>
         <div className="mt-7">
           <input
             type="submit"

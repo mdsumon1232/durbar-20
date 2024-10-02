@@ -1,0 +1,25 @@
+.hero,
+.hero-2,
+.hero-3,
+.hero-4 {
+  background-image: url(../../assets/images/donate-1.jpg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.hero-2 {
+  background-image: url(../../assets/images/donate-2.jpg);
+}
+.hero-3 {
+  background-image: url(../../assets/images/donate-3.jpg);
+}
+.hero-4 {
+  background-image: url(../../assets/images/donate-4.jpg);
+}
+
+.hero-wrapper {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* carousel pagination style */

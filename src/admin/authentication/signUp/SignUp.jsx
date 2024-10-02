@@ -1,6 +1,10 @@
-import React from "react";
+import { useState } from "react";
+import { FaPhotoFilm } from "react-icons/fa6";
 
 const SignUp = () => {
+  const [profile, setProfile] = useState(null);
+  const [img, setImg] = useState("");
+
   const handleForm = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -17,12 +21,12 @@ const SignUp = () => {
     if (mobileValidate.test(mobile)) {
       if (passwordValidation.test(password)) {
         if (password === confirm_password) {
-          const adminRequestedData = {
-            full_name: full_name,
-            email: email,
-            mobile: mobile,
-            password: password,
-          };
+          const formData = new FormData();
+          formData.append("full_name", full_name);
+          formData.append("email", email);
+          formData.append("mobile", mobile);
+          formData.append("password", password);
+          formData.append("profile", profile);
 
           const xhr = new XMLHttpRequest();
           xhr.onreadystatechange = () => {
@@ -39,7 +43,7 @@ const SignUp = () => {
             true
           );
 
-          xhr.send(JSON.stringify(adminRequestedData));
+          xhr.send(formData);
         } else {
           alert("password does not match");
         }
@@ -116,6 +120,25 @@ const SignUp = () => {
               name="confirm_password"
               autoComplete="off"
             />
+          </div>
+          <div className="flex items-center mt-3">
+            <label htmlFor="" className="text-[20px]">
+              Profile
+            </label>
+            <input
+              type="file"
+              hidden
+              id="profile"
+              name="profile"
+              onChange={(e) => {
+                setProfile(e.target.files[0]);
+                setImg(e.target.value);
+              }}
+            />
+            <label htmlFor="profile">
+              <FaPhotoFilm className="text-[20px] ms-3" />
+            </label>
+            <p className="ms-2">{img}</p>
           </div>
           <div className="form-control mt-6">
             <button className="btn btn-primary">Register</button>
