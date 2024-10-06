@@ -53,7 +53,12 @@ const Dashboard = () => {
                 </Link>
               </li>
               <li className="mb-4">
-                <Link className="text-[20px] text-white">About</Link>
+                <Link
+                  to="/dashboard/aboutEditor"
+                  className="text-[20px] text-white"
+                >
+                  About
+                </Link>
               </li>
               <li className="mb-4">
                 <Link to="/dashboard/editor" className="text-[20px] text-white">

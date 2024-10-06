@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import AboutEditor from "../../admin/about/AboutEditor";
 import Admin_request from "../../admin/admin-data/Admin_request";
 import Login from "../../admin/authentication/login/login";
 import SignUp from "../../admin/authentication/signUp/SignUp";
@@ -82,6 +83,10 @@ const Router = createBrowserRouter([
         path: "/dashboard/blogs",
         element: <BlogList />,
         loader: () => fetch("http://localhost/durbar-20-client/blogLoad.php"),
+      },
+      {
+        path: "/dashboard/aboutEditor",
+        element: <AboutEditor />,
       },
     ],
   },
